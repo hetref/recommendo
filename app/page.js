@@ -8,12 +8,21 @@ import { useEffect, useState } from "react";
 import { createUser } from "@/lib/actions/user";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
+import { findAllActivities } from "@/lib/actions/activities";
 
 export default function Home() {
   const [authUser, setAuthUser] = useState();
   const [isAuthenticated, setIsAuthenticated] = useState();
   const [authId, setAuthId] = useState();
 
+  // const getActivities = async () => {
+  //   try {
+  //     const activities = await findAllActivities(); // Assuming findUser is imported or defined in Header.jsx
+  //     console.log(activities);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
