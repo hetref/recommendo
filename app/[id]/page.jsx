@@ -1,15 +1,22 @@
 "use client";
 import { findUser, updateUser } from "@/lib/actions/user";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Trash } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { RWebShare } from "react-web-share";
 
 const page = ({ params: { id } }) => {
   console.log(id);
   const [userData, setUserData] = useState();
   const [titleShare, setTitleShare] = useState("");
+
+  const successToast = (message) => {
+    toast.success(message, {
+      duration: 4000,
+      position: "bottom-right",
+    });
+  };
 
   useEffect(() => {
     const fetchUserD = async () => {
@@ -35,7 +42,18 @@ const page = ({ params: { id } }) => {
       };
     });
 
+    successToast("Skill added successfully");
     console.log(skill);
+  };
+
+  const removeSkillHandler = (skill) => {
+    setUserData((prev) => {
+      return {
+        ...prev,
+        skills: prev.skills.filter((s) => s !== skill),
+      };
+    });
+    successToast("Skill removed successfully");
   };
 
   const addUpdateHandler = () => {
@@ -47,7 +65,18 @@ const page = ({ params: { id } }) => {
       };
     });
 
+    successToast("Interest added successfully");
     console.log(interest);
+  };
+
+  const removeInterestHandler = (interest) => {
+    setUserData((prev) => {
+      return {
+        ...prev,
+        interests: prev.interests.filter((s) => s !== interest),
+      };
+    });
+    successToast("Interest removed successfully");
   };
 
   const dataUpdateHandler = async () => {
@@ -56,6 +85,7 @@ const page = ({ params: { id } }) => {
     const updatedUser = await updateUser(id, userData);
 
     console.log(updatedUser);
+    successToast("Updated Successfully");
   };
 
   if (!userData) {
@@ -83,7 +113,7 @@ const page = ({ params: { id } }) => {
               onClick={() => console.log("shared successfully!")}
             >
               <button className="text-white font-mono text-xl">
-                Share Prfile
+                Share Profile
               </button>
             </RWebShare>
           </nav>
@@ -113,12 +143,20 @@ const page = ({ params: { id } }) => {
               </button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {userData?.skills.length === 0 && (
+                <div className="text-red-500 font-mono">
+                  No skills added yet
+                </div>
+              )}
               {userData?.skills.map((skill, index) => (
                 <div
                   key={index}
-                  className="border-2 border-black px-4 rounded-md p-2 w-full"
+                  className="border-2 border-black px-4 rounded-md p-2 w-full flex justify-between items-start"
                 >
                   {skill}
+                  <button onClick={() => removeSkillHandler(skill)}>
+                    <Trash className="w-6 h-6 cursor-pointer" />
+                  </button>
                 </div>
               ))}
             </div>
@@ -132,12 +170,20 @@ const page = ({ params: { id } }) => {
               </button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {userData?.interests.length === 0 && (
+                <div className="text-red-500 font-mono">
+                  No interests added yet
+                </div>
+              )}
               {userData?.interests.map((interest, index) => (
                 <div
                   key={index}
-                  className="border-2 border-black px-4 rounded-md p-2 w-full"
+                  className="border-2 border-black px-4 rounded-md p-2 w-full flex justify-between items-start"
                 >
                   {interest}
+                  <button onClick={() => removeInterestHandler(interest)}>
+                    <Trash className="w-6 h-6 cursor-pointer" />
+                  </button>
                 </div>
               ))}
             </div>

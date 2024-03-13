@@ -15,6 +15,8 @@ const Authentication = ({ isUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [activeTab, setActiveTab] = useState("register");
+
   const signupHandler = async () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
@@ -62,50 +64,193 @@ const Authentication = ({ isUser }) => {
   return (
     <div>
       {isUser === false && (
-        <>
+        <div className="flex justify-center items-center h-[100svh]">
           {/* Register */}
-          <h1 className="text-2xl">Sign Up</h1>
-          <input
-            type="text"
-            placeholder="Enter Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Enter Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Enter Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={signupHandler}>Register</button>
+          {activeTab === "register" ? (
+            <div className="flex flex-col max-w-[800px] w-full bg-[#e6f3fc] px-[2svw] py-[4svh] md:px-[6svw] md:py-[8svh] rounded">
+              <h1 className="text-2xl text-center mb-4 font-bold">Sign Up</h1>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-1"
+                  htmlFor="name"
+                >
+                  Name
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-1"
+                  htmlFor="username"
+                >
+                  Username
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-1"
+                  htmlFor="email"
+                >
+                  Email
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-1"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              {/* <input
+                type="text"
+                placeholder="Enter Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Enter Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Enter Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Enter Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              /> */}
+              <button
+                className="bg-cyan-500 text-white px-4 py-2 rounded mt-4 hover:bg-cyan-600 duration-300 ease-in-out transition-all"
+                onClick={signupHandler}
+              >
+                Register
+              </button>
+              <p className="mt-4">
+                Already have an account?{" "}
+                <span
+                  className="text-blue-500 cursor-pointer"
+                  onClick={() => setActiveTab("login")}
+                >
+                  Login
+                </span>
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col max-w-[800px] w-full bg-[#e6f3fc] px-[2svw] py-[4svh] md:px-[6svw] md:py-[8svh] rounded">
+              <h1 className="text-2xl text-center mb-4 font-bold">LogIn</h1>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-1"
+                  htmlFor="email"
+                >
+                  Email
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-1"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              {/* <input
+                type="text"
+                placeholder="Enter Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Enter Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              /> */}
+              <button
+                className="bg-cyan-500 text-white px-4 py-2 rounded mt-4 hover:bg-cyan-600 duration-300 ease-in-out transition-all"
+                onClick={loginHandler}
+              >
+                Login
+              </button>
+              <p className="mt-4">
+                Don't have an account?{" "}
+                <span
+                  className="text-blue-500 cursor-pointer"
+                  onClick={() => setActiveTab("register")}
+                >
+                  Register
+                </span>
+              </p>
+            </div>
+          )}
           {/* Login */}
-          <h1 className="text-2xl mt-4">LogIn</h1>
-          <input
-            type="text"
-            placeholder="Enter Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={loginHandler}>Login</button>
-        </>
+        </div>
       )}
       {/* {isUser === true && (
         <>
