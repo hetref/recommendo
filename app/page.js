@@ -2,10 +2,11 @@
 
 import Header from "@/components/Header";
 import Authentication from "@/components/Authentication";
-import { onAuthStateChanged } from "firebase/auth";
+// import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase/config";
 import { useEffect, useState } from "react";
 import { createUser } from "@/lib/actions/user";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function Home() {
   const [authUser, setAuthUser] = useState();
