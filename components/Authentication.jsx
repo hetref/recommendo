@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const Authentication = ({ isUser }) => {
@@ -20,6 +21,7 @@ const Authentication = ({ isUser }) => {
         const user = userCredential.user;
         // saveDataIntoMongo({ email, password });
         const newUser = await createUser({
+          firebaseId: user.uid,
           name,
           email,
           username,
@@ -105,13 +107,14 @@ const Authentication = ({ isUser }) => {
           <button onClick={loginHandler}>Login</button>
         </>
       )}
-      {isUser === true && (
+      {/* {isUser === true && (
         <>
           <h1>User is Authenticated</h1>
+          <Link href="/aryanshinde">Profile</Link>
           <button onClick={logout}>Logout</button>
           <button onClick={saveDataMongo}>Save Data</button>
         </>
-      )}
+      )} */}
     </div>
   );
 };
