@@ -7,10 +7,12 @@ import { auth } from "@/firebase/config";
 import { useEffect, useState } from "react";
 import { createUser } from "@/lib/actions/user";
 import { onAuthStateChanged } from "firebase/auth";
+import Link from "next/link";
 
 export default function Home() {
   const [authUser, setAuthUser] = useState();
   const [isAuthenticated, setIsAuthenticated] = useState();
+  const [authId, setAuthId] = useState();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -21,6 +23,7 @@ export default function Home() {
         // ...
         setAuthUser(user);
         setIsAuthenticated(true);
+        setAuthId(uid);
         console.log(user);
       } else {
         // User is signed out
@@ -31,10 +34,21 @@ export default function Home() {
     });
   }, []);
 
+  const logout = () => {
+    auth.signOut();
+  };
+
   return (
     <>
       <Authentication isUser={isAuthenticated} />
-      {isAuthenticated === true && <Header />}
+      {isAuthenticated === true && (
+        <>
+          <Link href={`/${authId}`}>Profile</Link>
+          <Header authUser={authId} />
+        </>
+      )}
+
+      <button onClick={logout}>Logout</button>
     </>
   );
 }
