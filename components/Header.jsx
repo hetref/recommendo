@@ -8,9 +8,6 @@ export default function Header() {
   const [email, setEmail] = useState("");
 
   const saveData = async () => {
-    console.log("Name", name);
-    console.log("Email", email);
-
     const newUser = await createUser({ name, email });
 
     console.log(newUser);
