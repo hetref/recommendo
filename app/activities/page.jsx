@@ -16,7 +16,7 @@ function page() {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState();
   const [bannerImage, setBannerImage] = useState("");
-  const [downloadURL, setDownloadURL] = useState("");
+  // const [downloadURL, setDownloadURL] = useState("");
 
   const uploadImage = async () => {
     if (bannerImage) {
@@ -38,13 +38,13 @@ function page() {
           console.log("Upload is done");
           console.log("Download URL:", downloadurl);
           console.log("Upload is done");
-          setDownloadURL(downloadurl);
+          // setDownloadURL(downloadurl);
           const data = await createActivity({
             name,
             description,
             date,
             tags: tags.split(","),
-            downloadURL,
+            downloadURL: downloadurl,
           });
 
           console.log(data);
@@ -57,7 +57,7 @@ function page() {
     await uploadImage();
 
     // console.log(data);
-    console.log(name, tags, description, date, downloadURL);
+    // console.log(name, tags, description, date, downloadURL);
   };
 
   return (
