@@ -9,20 +9,24 @@ import {
 import React, { useState } from "react";
 
 const Authentication = ({ isUser }) => {
-  const [name, setName] = useState("demo");
-  const [email, setEmail] = useState("demo");
-  const [password, setPassword] = useState("demo");
-
-  // const saveDataIntoMongo = async (user) => {
-  //   console.log("newuser", newUser);
-  // };
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const signupHandler = async () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
         // saveDataIntoMongo({ email, password });
-        const newUser = await createUser({ name, email });
+        const newUser = await createUser({
+          name,
+          email,
+          username,
+          bio: "",
+          skills: [],
+          interests: [],
+        });
         console.log(newUser, "newUser");
         console.log(user);
       })
@@ -57,6 +61,7 @@ const Authentication = ({ isUser }) => {
     <div>
       {isUser === false && (
         <>
+          {/* Register */}
           <h1 className="text-2xl">Sign Up</h1>
           <input
             type="text"
@@ -72,13 +77,19 @@ const Authentication = ({ isUser }) => {
           />
           <input
             type="text"
+            placeholder="Enter Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="text"
             placeholder="Enter Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={signupHandler}>Save Data</button>
-
-          <h1 className="text-2xl">LogIn</h1>
+          <button onClick={signupHandler}>Register</button>
+          {/* Login */}
+          <h1 className="text-2xl mt-4">LogIn</h1>
           <input
             type="text"
             placeholder="Enter Email"
