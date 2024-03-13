@@ -4,7 +4,17 @@ import { createActivity } from "@/lib/actions/activities";
 import { useState } from "react";
 
 function page() {
-  const addActivity = async () => {
+  //   const addActivity = async () => {
+  //     console.log(date);
+  //     const newAct = await createActivity({
+  //       name,
+  //       tags,
+  //       description,
+  //       date,
+  //     });
+  const addActivity = async (e) => {
+    e.preventDefault();
+
     const newAct = await createActivity({
       name,
       tags,
