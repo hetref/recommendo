@@ -18,6 +18,13 @@ const page = ({ params: { id } }) => {
     });
   };
 
+  const errorToast = (message) => {
+    toast.error(message, {
+      duration: 4000,
+      position: "bottom-right",
+    });
+  };
+
   useEffect(() => {
     const fetchUserD = async () => {
       try {
@@ -35,6 +42,10 @@ const page = ({ params: { id } }) => {
 
   const addSkillHandler = () => {
     const skill = prompt("Enter the skill");
+    if (skill === "") {
+      errorToast("Skill cannot be empty");
+      return;
+    }
     setUserData((prev) => {
       return {
         ...prev,
@@ -58,6 +69,10 @@ const page = ({ params: { id } }) => {
 
   const addUpdateHandler = () => {
     const interest = prompt("Enter the interest");
+    if (interest === "") {
+      errorToast("Interest cannot be empty");
+      return;
+    }
     setUserData((prev) => {
       return {
         ...prev,
