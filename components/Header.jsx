@@ -1,5 +1,3 @@
-"use client";
-
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -9,40 +7,68 @@ import { findAllActivities } from "@/lib/actions/activities";
 export default function Header({ authUser }) {
   console.log(authUser);
   const [userData, setUserData] = useState();
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState();
+  const [filteredActivities, setFilteredActivities] = useState(); // State for filtered activities
+
   useEffect(() => {
-    const fetchUserD = async () => {
+    const fetchData = async () => {
       try {
-        const user = await findUser(authUser); // Assuming findUser is imported or defined in Header.jsx
+        const user = await findUser(authUser);
         console.log(user);
         setUserData(user);
+
+        const allActivities = await findAllActivities();
+        console.log(allActivities);
+        setActivities(allActivities);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchUserD();
-
-    const getActivities = async () => {
-      try {
-        const act = await findAllActivities(); // Assuming findUser is imported or defined in Header.jsx
-        console.log(act);
-        setActivities(act);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getActivities();
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if (userData && activities) {
+      // Filter and sort activities based on user interests and activity tags
+      const filterAndSortActivities = () => {
+        if (userData.interests.length === 0) {
+          // If no interests added, display all activities
+          setFilteredActivities(activities);
+        } else {
+          // If interests added, apply filtering and sorting logic
+          const filteredActivities = activities.map((activity) => {
+            const matchingTags = userData.interests.filter((tag) =>
+              activity.tags.includes(tag)
+            );
+            return {
+              ...activity,
+              matchingTagsCount: matchingTags.length,
+            };
+          });
+
+          // Sort filtered activities based on matching tags count in descending order
+          filteredActivities.sort(
+            (a, b) => b.matchingTagsCount - a.matchingTagsCount
+          );
+
+          // Set the filtered and sorted activities to state
+          setFilteredActivities(filteredActivities);
+        }
+      };
+
+      filterAndSortActivities();
+    }
+  }, [userData, activities]);
 
   return (
     <>
       {userData?.interests.length === 0 && (
         <Alert>
           <Terminal className="h-4 w-4" />
-          <AlertTitle>Heads up!</AlertTitle>
+          <AlertTitle>Yedya Bhokachya</AlertTitle>
           <AlertDescription>
-            You can add components and dependencies to your app using the cli.
+            Interests & Skills add kar profile madhe
           </AlertDescription>
         </Alert>
       )}
@@ -51,12 +77,41 @@ export default function Header({ authUser }) {
         //DISPLAY ALL ACTIVITIES
         <div>
           {/* //MAP THROUGH ACTIVITIES AND DISPLAY THEM */}
-
-          {activities.map((activity) => (
+          {activities?.map((activity) => (
             <div key={activity.id}>
-              <h1>{activity.name}</h1>
-              <p>{activity.description}</p>
-              <p>{activity.date}</p>
+              <ul>
+                <li>
+                  <h1>{activity.name}</h1>
+                </li>
+                <li>
+                  <p>{activity.description}</p>
+                </li>
+                <li>
+                  <p>{activity.date}</p>
+                </li>
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {userData?.interests.length !== 0 && (
+        //DISPLAY FILTERED ACTIVITIES
+        <div>
+          {/* //MAP THROUGH FILTERED ACTIVITIES AND DISPLAY THEM */}
+          {filteredActivities?.map((activity) => (
+            <div key={activity.id}>
+              <ul>
+                <li>
+                  <h1>-{activity.name}</h1>
+                </li>
+                <li>
+                  <p>{activity.description}</p>
+                </li>
+                <li>
+                  <p>{activity.date}</p>
+                </li>
+              </ul>
             </div>
           ))}
         </div>
