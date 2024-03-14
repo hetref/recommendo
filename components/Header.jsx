@@ -3,6 +3,7 @@ import { CalendarRangeIcon, Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { findUser } from "@/lib/actions/user";
 import { findAllActivities } from "@/lib/actions/activities";
+import { redirect } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +22,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-// import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 
 export default function Header({ authUser }) {
@@ -40,6 +40,11 @@ export default function Header({ authUser }) {
         const user = await findUser(authUser);
         console.log(user);
         setUserData(user);
+
+        if (user?.bio) {
+        } else {
+          redirect("/admin");
+        }
 
         const allActivities = await findAllActivities();
         console.log(allActivities);

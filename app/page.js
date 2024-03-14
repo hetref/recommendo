@@ -5,7 +5,7 @@ import Authentication from "@/components/Authentication";
 // import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase/config";
 import { useEffect, useState } from "react";
-import { createUser } from "@/lib/actions/user";
+import { createUser, findUser } from "@/lib/actions/user";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { findAllActivities } from "@/lib/actions/activities";
@@ -15,16 +15,10 @@ export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState();
   const [authId, setAuthId] = useState();
 
-  // const getActivities = async () => {
-  //   try {
-  //     const activities = await findAllActivities(); // Assuming findUser is imported or defined in Header.jsx
-  //     console.log(activities);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
+  // const getUser = async (id) => {
   // };
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
