@@ -52,12 +52,31 @@ export default function Home() {
       <Authentication isUser={isAuthenticated} />
       {isAuthenticated === true && (
         <>
-          <Link href={`/${authId}`}>Profile</Link>
+          {/* <div className="flex justify-end h-[60px] bg-cyan-800">
+            <Link href={`/${authId}`}>Profile</Link>
+          </div> */}
+          <div className="h-[60px] mb-[40px]">
+            <nav className="bg-gradient-to-r from-cyan-600 to-blue-700 p-4 flex justify-end items-center gap-10">
+              <Link
+                href={`/${authId}`}
+                className="text-white font-mono text-xl border-2 border-white px-4 py-2 rounded-md"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={logout}
+                className="text-white font-mono text-xl border-2 border-white px-4 py-2 rounded-md"
+              >
+                Logout
+              </button>
+            </nav>
+          </div>
+
           <Header authUser={authId} />
         </>
       )}
 
-      <button onClick={logout}>Logout</button>
+      {/* <button onClick={logout}>Logout</button> */}
     </>
   );
 }
