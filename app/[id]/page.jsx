@@ -1,6 +1,6 @@
 "use client";
 import { findUser, updateUser } from "@/lib/actions/user";
-import { PlusCircle, Trash } from "lucide-react";
+import { PlusCircle, StepBack, Trash } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -42,14 +42,24 @@ const page = ({ params: { id } }) => {
 
   const addSkillHandler = () => {
     const skill = prompt("Enter the skill");
-    if (skill === "") {
+    if (skill === "" || skill === null) {
       errorToast("Skill cannot be empty");
       return;
     }
+
+    // Check if the skill already exists
+    if (userData.skills.includes(skill.toLowerCase())) {
+      errorToast("Skill already exists");
+      return;
+    }
+
+    // replace extra spaces from the skill input with a - and convert it in lowerCase
+    const formattedSkill = skill.toLowerCase().replace(/\s+/g, "-");
+
     setUserData((prev) => {
       return {
         ...prev,
-        skills: [...prev.skills, skill],
+        skills: [...prev.skills, formattedSkill],
       };
     });
 
@@ -69,14 +79,23 @@ const page = ({ params: { id } }) => {
 
   const addUpdateHandler = () => {
     const interest = prompt("Enter the interest");
-    if (interest === "") {
+    if (interest === "" || interest === null) {
       errorToast("Interest cannot be empty");
       return;
     }
+
+    // Check if the interest already exists
+    if (userData.interests.includes(interest.toLowerCase())) {
+      errorToast("Interest already exists");
+      return;
+    }
+
+    const formattedInterest = interest.toLowerCase().replace(/\s+/g, "-");
+
     setUserData((prev) => {
       return {
         ...prev,
-        interests: [...prev.interests, interest],
+        interests: [...prev.interests, formattedInterest],
       };
     });
 
@@ -116,8 +135,11 @@ const page = ({ params: { id } }) => {
       <div className="relative">
         <div className="fixed top-0 left-0 right-0 h-[60px]">
           <nav className="bg-gradient-to-r from-cyan-600 to-blue-700 p-4 flex justify-between items-center">
-            <Link href="/" className="text-white font-mono text-xl">
-              Back
+            <Link
+              href="/"
+              className="text-white font-mono text-xl flex gap-2 justify-center items-center"
+            >
+              <StepBack /> Back
             </Link>
             <RWebShare
               data={{
@@ -127,7 +149,7 @@ const page = ({ params: { id } }) => {
               }}
               onClick={() => console.log("shared successfully!")}
             >
-              <button className="text-white font-mono text-xl">
+              <button className="text-white font-mono text-xl border-2 border-white px-4 py-2 rounded-md">
                 Share Profile
               </button>
             </RWebShare>
