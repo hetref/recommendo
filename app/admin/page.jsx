@@ -1,8 +1,8 @@
 "use client";
 
 import { createActivity } from "@/lib/actions/activities";
-import { useState } from "react";
-import { storage } from "@/firebase/config";
+import { useEffect, useState } from "react";
+import { auth, storage } from "@/firebase/config";
 // import { getStorage, uploadBytes } from "firebase/storage";
 import {
   getDownloadURL,
@@ -10,6 +10,7 @@ import {
   uploadBytesResumable,
   UploadTaskSnapshot,
 } from "firebase/storage";
+import { findUser } from "@/lib/actions/user";
 function page() {
   const [activities, setActivities] = useState([]);
 
@@ -19,6 +20,18 @@ function page() {
   const [date, setDate] = useState();
   const [bannerImage, setBannerImage] = useState("");
   // const [downloadURL, setDownloadURL] = useState("");
+
+  //   const userId = auth.currentUser;
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      const data = await findUser(auth?.currentUser?.uid);
+      console.log(data);
+      console.log(auth.currentUser);
+      //   setActivities(data.activities);
+    };
+    fetchActivities();
+  }, [auth?.currentUser]);
 
   const uploadImage = async () => {
     if (bannerImage) {
@@ -47,6 +60,7 @@ function page() {
             date,
             tags: tags.split(","),
             downloadURL: downloadurl,
+            author: user.uid,
           });
 
           console.log(data);
@@ -57,7 +71,7 @@ function page() {
   const saveData = async (e) => {
     e.preventDefault();
     await uploadImage();
-    setActivities([...activities, { name, description, date, tags }]);
+    // setActivities([...activities, { name, description, date, tags }]);
 
     // console.log(data);
     // console.log(name, tags, description, date, downloadURL);
