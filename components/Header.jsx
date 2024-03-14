@@ -169,6 +169,8 @@ export default function Header({ authUser }) {
     <>
       <div className="flex justify-center items-center">
         <div className="max-w-7xl w-full">
+          {userData?.bio === "" ? <>USER</> : <>ADMIN</>}
+
           {userData?.interests.length === 0 && (
             <div>
               <Alert>

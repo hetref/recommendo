@@ -2,7 +2,7 @@
 
 import { createActivity } from "@/lib/actions/activities";
 import { useState } from "react";
-import { storage } from "@/firebase/config";
+import { auth, storage } from "@/firebase/config";
 // import { getStorage, uploadBytes } from "firebase/storage";
 import {
   getDownloadURL,
@@ -17,6 +17,8 @@ function page() {
   const [date, setDate] = useState();
   const [bannerImage, setBannerImage] = useState("");
   // const [downloadURL, setDownloadURL] = useState("");
+
+  const user = auth.currentUser;
 
   const uploadImage = async () => {
     if (bannerImage) {
@@ -45,6 +47,7 @@ function page() {
             date,
             tags: tags.split(","),
             downloadURL: downloadurl,
+            author: user.uid,
           });
 
           console.log(data);
