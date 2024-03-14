@@ -23,6 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
+import Link from "next/link";
 
 export default function Header({ authUser }) {
   console.log(authUser);
@@ -174,7 +175,13 @@ export default function Header({ authUser }) {
     <>
       <div className="flex justify-center items-center">
         <div className="max-w-7xl w-full">
-          {userData?.bio === "" ? <>USER</> : <>ADMIN</>}
+          {userData?.bio === "" ? (
+            <>USER</>
+          ) : (
+            <>
+              <Link href="/admin">Admin Panel</Link>
+            </>
+          )}
 
           {userData?.interests.length === 0 && (
             <div>
