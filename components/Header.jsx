@@ -3,6 +3,7 @@ import { Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { findUser } from "@/lib/actions/user";
 import { findAllActivities } from "@/lib/actions/activities";
+import { redirect } from "next/navigation";
 
 export default function Header({ authUser }) {
   console.log(authUser);
@@ -16,6 +17,11 @@ export default function Header({ authUser }) {
         const user = await findUser(authUser);
         console.log(user);
         setUserData(user);
+
+        if (user?.bio) {
+        } else {
+          redirect("/admin");
+        }
 
         const allActivities = await findAllActivities();
         console.log(allActivities);
