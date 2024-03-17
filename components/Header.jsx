@@ -180,9 +180,7 @@ export default function Header({ authUser }) {
           {userData?.bio === "" ? (
             <></>
           ) : (
-            <>
-              <Link href="/admin">Admin Panel</Link>
-            </>
+            <><Link href="/admin">Admin Panel</Link></>
           )}
 
           {userData?.interests.length === 0 && (
