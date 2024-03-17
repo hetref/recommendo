@@ -1,5 +1,5 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CalendarRangeIcon, Terminal } from "lucide-react";
+import { CalendarRangeIcon, Filter, Pipette, Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { findUser } from "@/lib/actions/user";
 import { findAllActivities } from "@/lib/actions/activities";
@@ -42,13 +42,13 @@ export default function Header({ authUser }) {
         console.log(user);
         setUserData(user);
 
-        if (user?.bio) {
-        } else {
-          redirect("/admin");
-        }
+        // if (user?.bio) {
+        // } else {
+        //   redirect("/admin");
+        // }
 
         const allActivities = await findAllActivities();
-        console.log(allActivities);
+        console.log("ALL ACTIVITIES", allActivities);
         setActivities(allActivities);
 
         // I want to set all the new tags used in the tagsList array, and remove all the duplicated tags so that I can show all the tags used in the activities
@@ -171,144 +171,32 @@ export default function Header({ authUser }) {
     setFilteredActivities(filteredActivities);
   };
 
+  console.log("USERDATA", userData);
+
   return (
     <>
       <div className="flex justify-center items-center">
         <div className="max-w-7xl w-full">
           {userData?.bio === "" ? (
-            <>USER</>
+            <></>
           ) : (
-            <>
-              <Link href="/admin">Admin Panel</Link>
-            </>
+            <><Link href="/admin">Admin Panel</Link></>
           )}
 
           {userData?.interests.length === 0 && (
             <div>
               <Alert>
                 <Terminal className="h-4 w-4" />
-                <AlertTitle>Yedya Bhokachya</AlertTitle>
+                <AlertTitle>Skills & Interests!</AlertTitle>
                 <AlertDescription>
-                  Interests & Skills add kar profile madhe
+                  Interests & Skills are not added yet. Please add your
+                  interests in profile page. Please add interests to search the
+                  events
                 </AlertDescription>
               </Alert>
-              <div>
+              <div className="grid grid-cols-3 gap-10 mt-10">
                 {/* //MAP THROUGH ACTIVITIES AND DISPLAY THEM */}
                 {activities?.map((activity) => (
-                  <div key={activity.id}>
-                    <ul>
-                      <li>
-                        <h1>{activity.name}</h1>
-                      </li>
-                      <li>
-                        <p>{activity.description}</p>
-                      </li>
-                      <li>
-                        <p>{activity.date}</p>
-                      </li>
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {userData?.interests.length !== 0 && (
-            //DISPLAY FILTERED ACTIVITIES
-            <>
-              {/* Add a Search bar which filters activities based on name */}
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search activities"
-              />
-
-              <button onClick={searchHandler}>Search</button>
-
-              <AlertDialog>
-                <AlertDialogTrigger>Filters</AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          // className={cn(
-                          //   "w-[240px] justify-start text-left font-normal",
-                          //   !date && "text-muted-foreground"
-                          // )}
-                          className="w-[240px] justify-start text-left font-normal"
-                        >
-                          {/* <CalendarIcon className="mr-2 h-4 w-4" /> */}
-                          <CalendarRangeIcon className="mr-2 h-4 w-4" />
-                          {date ? (
-                            format(date, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <AlertDialogTitle>Select Filters</AlertDialogTitle>
-                    {/* <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      your account and remove your data from our servers.
-                    </AlertDialogDescription> */}
-                    {/* map tagList to select the filters tag */}
-                    <div className="flex flex-wrap gap-4 ">
-                      {tagsList?.map((tag) => (
-                        <label key={tag}>
-                          <input
-                            type="checkbox"
-                            value={tag}
-                            checked={selectedFilters.includes(tag)}
-                            className="mr-2"
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setSelectedFilters((prev) => [...prev, tag]);
-                              } else {
-                                setSelectedFilters((prev) =>
-                                  prev.filter((item) => item !== tag)
-                                );
-                              }
-                            }}
-                          />
-                          {tag}
-                        </label>
-                      ))}
-                    </div>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    {/* <AlertDialogAction onClick={filterActivitiesDialog}>
-                      Filter
-                    </AlertDialogAction> */}
-                    <button onClick={filterActivitiesDialog}>Filter</button>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-
-              <div className="grid grid-cols-3 gap-10">
-                {/* //MAP THROUGH FILTERED ACTIVITIES AND DISPLAY THEM */}
-                {filteredActivities?.length === 0 && (
-                  <div>
-                    <Alert>
-                      <Terminal className="h-4 w-4" />
-                      <AlertTitle>Yedya Bhokachya</AlertTitle>
-                      <AlertDescription>No activities found</AlertDescription>
-                    </Alert>
-                  </div>
-                )}
-                {filteredActivities?.map((activity) => (
                   <div
                     key={activity.id}
                     className="border-2 border-black px-6 py-4 rounded"
@@ -332,8 +220,145 @@ export default function Header({ authUser }) {
                   </div>
                 ))}
               </div>
-            </>
+            </div>
           )}
+
+          {(userData?.bio === "" || userData?.bio.length === 0) &&
+            userData?.interests.length !== 0 && (
+              //DISPLAY FILTERED ACTIVITIES
+              <>
+                {/* Add a Search bar which filters activities based on name */}
+                <div className="flex justify-center items-center my-8">
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    placeholder="Search activities"
+                    className="border-2 px-6 py-2 rounded-full mr-4 w-[400px]"
+                  />
+
+                  <button
+                    onClick={searchHandler}
+                    className="border-2 border-cyan/80 bg-cyan-800 text-white text-[16px] px-6 py-2 rounded-full"
+                  >
+                    Search
+                  </button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <button className="border-2 border-cyan/80 bg-cyan-800 text-white text-[16px] px-6 py-2 rounded-full flex gap-2 justify-center items-center">
+                        <Filter className="w-4 h-4" /> Filters
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant={"outline"}
+                              // className={cn(
+                              //   "w-[240px] justify-start text-left font-normal",
+                              //   !date && "text-muted-foreground"
+                              // )}
+                              className="w-[240px] justify-start text-left font-normal"
+                            >
+                              {/* <CalendarIcon className="mr-2 h-4 w-4" /> */}
+                              <CalendarRangeIcon className="mr-2 h-4 w-4" />
+                              {date ? (
+                                format(date, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={date}
+                              onSelect={setDate}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <AlertDialogTitle>Select Filters</AlertDialogTitle>
+                        <div className="flex flex-wrap gap-4 h-[500px] overflow-y-scroll border-2 px-6 py-2 rounded">
+                          {tagsList?.map((tag) => (
+                            <label key={tag}>
+                              <input
+                                type="checkbox"
+                                value={tag}
+                                checked={selectedFilters.includes(tag)}
+                                className="mr-2"
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedFilters((prev) => [
+                                      ...prev,
+                                      tag,
+                                    ]);
+                                  } else {
+                                    setSelectedFilters((prev) =>
+                                      prev.filter((item) => item !== tag)
+                                    );
+                                  }
+                                }}
+                              />
+                              {tag}
+                            </label>
+                          ))}
+                        </div>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        {/* <AlertDialogAction onClick={filterActivitiesDialog}>
+                      Filter
+                    </AlertDialogAction> */}
+                        <button onClick={filterActivitiesDialog}>Filter</button>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+
+                <div className="grid grid-cols-3 gap-10">
+                  {/* //MAP THROUGH FILTERED ACTIVITIES AND DISPLAY THEM */}
+                  {filteredActivities?.length === 0 && (
+                    <div>
+                      <Alert>
+                        <Terminal className="h-4 w-4" />
+                        <AlertTitle>No Data</AlertTitle>
+                        <AlertDescription>No activities found</AlertDescription>
+                      </Alert>
+                    </div>
+                  )}
+                  {filteredActivities?.map((activity) => (
+                    <div
+                      key={activity.id}
+                      className="border-2 border-black px-6 py-4 rounded"
+                    >
+                      <h1 className="text-2xl font-bold mb-2">
+                        {activity.name}
+                      </h1>
+                      <p className="text-black/80 mb-2">
+                        {activity.description}
+                      </p>
+                      <p className="text-black/80 mb-4">{activity.date}</p>
+                      <div className="flex gap-x-4 gap-y-1 flex-wrap">
+                        {
+                          //DISPLAY MATCHING TAGS
+                          activity.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="bg-cyan-800/80 text-white px-2 py-1 rounded"
+                            >
+                              {tag}
+                            </span>
+                          ))
+                        }
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
         </div>
       </div>
     </>
